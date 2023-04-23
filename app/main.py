@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from config import make_conf_dict
 import uvicorn
-from api import user_router
+from api import user_router,product_router
+from model import UserModel,ProductModel
+from service import UserService,ProductService
 
 class Services:
     pass
@@ -14,11 +16,16 @@ def create_app():
     @app.get("/ping")
     def ping():
         return {"data":"pong"}
+
+    user_model=UserModel()
+    product_mode=ProductModel()
     
     services=Services
-    # services.user_service=UserService(user_model,app.config)
+    services.user_service=UserService(user_model,app.conf)
+    services.product_service=ProductService(product_mode,app.conf)
+
     user_router(app,services)
-    
+    product_router(app,services)
     return app
 
 
