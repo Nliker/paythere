@@ -4,6 +4,9 @@ from sql import get_db
 from sqlalchemy.orm import Session
 from sql import User,Product
 from schema import *
+from auth import verify_token
+import traceback
+
 sys.path.append((os.path.dirname(os.path.abspath(os.path.dirname(__file__)))))
 
 
@@ -17,14 +20,22 @@ def user_router(app,services):
 
     @user_api.post("/sign_up")
     async def post_sign_up(new_user: UserCreate,db: Session = Depends(get_db)):
-        result=user_service.set_db(db).create_user(new_user)
-        print(result)
+        try:
+            result=user_service.set_db(db).create_user(new_user)
+            print(result)
 
-        # result=db.query(User).filter(User.phone_number == phone_number).first()
-        # print(result.__dict__)
-
-        return {"data":"good"}
-
+            return {"data":"good"}
+        except Exception as es:
+            print(traceback.format_exc())
+            return {"data":False}
     @user_api.post("/login")
     async def post_login(phone_number: str,password: str):
         return {"data":"good"}
+    
+    @user_api.get("{user_id}")
+    async def get_user(user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
+        try:
+            print(user_id)
+            return {"data":"token_good"}
+        except:
+            return {"data":"token_failed"}

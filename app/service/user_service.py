@@ -15,8 +15,9 @@ class UserService:
 
     def create_user(self,new_user):
         try:
+            print(5/0)
             result=self.user_model.insert_user(new_user)
+            
             return result
         except DatabaseError as error_mode:
-            print(error_mode)
-            return {"error":error_mode.__str__()}
+            raise DatabaseError()
