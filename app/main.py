@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from config import make_conf_dict
 import uvicorn
-from fastapi import APIRouter
+from api import user_router
+
+class Services:
+    pass
 
 def create_app():
     app = FastAPI()
@@ -11,9 +14,14 @@ def create_app():
     @app.get("/ping")
     def ping():
         return {"data":"pong"}
+    
+    services=Services
+    # services.user_service=UserService(user_model,app.config)
+    user_router(app,services)
+    
     return app
 
-    
+
 
 app = create_app()
 
