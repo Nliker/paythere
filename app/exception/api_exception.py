@@ -6,5 +6,5 @@ class PhoneNumberExists(Exception):
 class UserWasDeleted(Exception):
     status_code=402
     def __str__(self):
-        return "The user with phone bumber was deleted"
+        return "The user with phone number was deleted"
 
