@@ -52,3 +52,15 @@ class UserModel:
             if user!=None:
                 user=User(**user.__dict__)
             return user
+        
+        
+    def select_user_id_and_password_by_phone_number(self,phone_number: str)->UserCredential:
+        try:
+            user=self.db.query(sql.User).filter(sql.User.phone_number==phone_number).first()
+        except:
+            raise DatabaseError()
+        else:
+            if user!=None:
+                user=UserCredential(**user.__dict__)
+            return user
+    

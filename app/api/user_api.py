@@ -25,7 +25,7 @@ def user_router(app,services):
             회원가입을 합니다.
         """
         try:
-            phone_number_existance=user_service.set_db(db).is_phone_number_existance(new_user.phone_number)
+            phone_number_existance=user_service.set_db(db).is_phone_number_exists(new_user.phone_number)
             if phone_number_existance==True:
                 raise exception.PhoneNumberExists()
             
@@ -47,19 +47,19 @@ def user_router(app,services):
                 return exception.make_http_error(500,es.__str__())
 
     @user_api.post("/login",status_code=Created_201.status_code,response_model=PostLoginResponse)
-    async def post_login(response: Response,phone_number: str,password: str,db: Session = Depends(get_db)):
+    async def post_login(response: Response,credential: CreateUser,db: Session = Depends(get_db)):
         try:
-            phone_number_existance=user_service.set_db(db).is_phone_number_exists(phone_number)
-            if phone_number_existance==True:
+            phone_number_existance=user_service.set_db(db).is_phone_number_exists(credential.phone_number)
+            if phone_number_existance==False:
                 raise exception.PhoneNumberNotExists()
 
-            user_credential=user_service.set_db(db).get_user_credential_by_phone_number(phone_number)
+            user_credential=user_service.set_db(db).get_user_credential_by_phone_number(credential.phone_number)
 
-            password_authorized=user_service.set_db(db).check_password(user_credential.hashed_password,password)
+            password_authorized=user_service.set_db(db).check_password(user_credential.hashed_password,credential.password)
             if password_authorized==False:
                 raise exception.PasswordNotAuthorized()
             access_token=user_service.set_db(db).generate_access_token(user_credential.id)
-
+            print(access_token)
             return make_http_response_json(Created_201,{"access_token":access_token})
         except Exception as es:
                 if exception.exceptions_dict.get(es.__class__.__name__,False):

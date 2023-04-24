@@ -30,7 +30,7 @@ class UserService:
         except DatabaseError as es:
             raise es
         
-    def is_phone_number_existance(self,phone_number: str)->bool:
+    def is_phone_number_exists(self,phone_number: str)->bool:
         """
             핸드폰 번호의 회원이 등록되어 있는가를 확인합니다.
         """
@@ -70,7 +70,7 @@ class UserService:
     def get_user_credential_by_phone_number(self,phone_number: str)->UserCredential:
         try:
             user_credential=self.user_model.select_user_id_and_password_by_phone_number(phone_number)
-            user=UserCredential(user_credential)
+            user=UserCredential(**user_credential.dict())
             return user
         except DatabaseError as es:
             raise es

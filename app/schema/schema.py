@@ -55,7 +55,12 @@ class AccessToken(BaseModel):
     access_token: str  
     
 class PostLoginResponse(ResponseBase):  
-    data: AccessToken
+    data: AccessToken | None
+    
+class UserCredential(InsertUser):
+    id: int
+
+
     
     
 
