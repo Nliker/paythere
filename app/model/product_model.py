@@ -39,3 +39,15 @@ class ProductModel:
             if product!=None:
                 product=Product(**product.__dict__)
             return product
+        
+    def update_product_by_id(self,fitered_update_product: dict,product_id: int)->int:
+        """
+            상품의 번호와 일치하는 상품의 정보를 업데이트 합니다.
+        """
+        try:
+            result=self.db.query(sql.Product).filter(sql.Product.id==product_id).update(fitered_update_product)
+        except:
+            raise DatabaseError()
+        else:
+            self.db.commit()
+            return result
