@@ -5,6 +5,8 @@ sys.path.append((os.path.dirname(os.path.abspath(os.path.dirname(__file__)))))
 from exception import DatabaseError
 from schema import *
 import bcrypt
+from datetime import datetime,timedelta
+import jwt
 
 class UserService:
     def __init__(self,user_model,conf):
@@ -65,4 +67,41 @@ class UserService:
         except DatabaseError as es:
             raise es
         
+    def get_user_credential_by_phone_number(self,phone_number: str)->UserCredential:
+        try:
+            user_credential=self.user_model.select_user_id_and_password_by_phone_number(phone_number)
+            user=UserCredential(user_credential)
+            return user
+        except DatabaseError as es:
+            raise es
+
+    def check_password(self,hashed_password: str,password: str)->bool:
+        try:
+            authorized=bcrypt.checkpw(password.encode('utf-8'),hashed_password.encode('utf-8'))
+            return authorized
+        except DatabaseError as es:
+            raise es
+    
+    def generate_access_token(self,user_id)->str:
+        try:
+            jwt_expire_time=timedelta(seconds=self.conf.jwt_expire_time)
+            utc_time_now=datetime.utcnow()
+            access_token_expire=utc_time_now+jwt_expire_time
+
+            payload={
+                'user_id':user_id,
+                'exp':access_token_expire,
+                'iat':utc_time_now
+            }
+
+            access_token=jwt.encode(payload,self.conf.jwt_secret_key,'HS256')
+            print(access_token)
+            return access_token
+        except DatabaseError as es:
+            raise es
+
+
+        
+    
+
         
