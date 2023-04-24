@@ -32,7 +32,7 @@ def product_router(app,services):
             
             created_product_id=product_service.set_db(db).create_new_product(new_product,current_user_id)
             created_product_info=product_service.set_db(db).get_product_info_by_id(created_product_id)
-            
+
             return make_http_response_json(Created_201,{"product":created_product_info})
         except Exception as es:
                 if exception.exceptions_dict.get(es.__class__.__name__,False):
@@ -44,12 +44,36 @@ def product_router(app,services):
                     return exception.make_http_error(500,es.__str__())
 
     @product_api.put("/{product_id}",status_code=Created_201.status_code,response_model=PutProductResponse)
-    async def put_product(response: Response,update_product:UpdateProduct,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
+    async def put_product(response: Response,product_id: int,update_product:UpdateProduct,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
         """
             상품의 정보를 업데이트 합니다.
         """
         try:
-            return make_http_response_json(Created_201,{"product":"good"})
+            user_existance=user_service.set_db(db).is_user_id_exists(current_user_id)
+            if user_existance==False:
+                raise exception.UserIdNotExists()
+
+            user_deleted=user_service.set_db(db).is_user_deleted_by_id(current_user_id)
+            if user_deleted==True:
+                raise exception.UserWasDeleted()
+
+            product_existance=product_service.set_db(db).is_product_id_exists(product_id)
+            if product_existance==False:
+                raise exception.ProductIdNotExists()
+                
+            product_deleted=product_service.set_db(db).is_product_deleted_by_id(product_id)
+            if product_deleted==True:
+                raise exception.ProductWasDeleted()
+            
+            is_product_authorized_by_user_id=product_service.set_db(db).is_product_authorized_by_user_id(current_user_id,product_id)
+            if is_product_authorized_by_user_id==False:
+                raise exception.ProductNotAuthorizedByUser()
+
+            updated_product_info=product_service.set_db(db).update_product_info_by_id(update_product,product_id)
+            if updated_product_info==False:
+                raise exception.ProductUpdatFailed()
+            
+            return make_http_response_json(Created_201,{"product":updated_product_info})
         except Exception as es:
                 if exception.exceptions_dict.get(es.__class__.__name__,False):
                     response.status_code=es.status_code
