@@ -68,6 +68,9 @@ class UserService:
             raise es
         
     def get_user_credential_by_phone_number(self,phone_number: str)->UserCredential:
+        """
+            핸드폰 번호를 통해 유저의 정보를 불러옵니다.
+        """
         try:
             user_credential=self.user_model.select_user_id_and_password_by_phone_number(phone_number)
             user=UserCredential(**user_credential.dict())
@@ -76,6 +79,9 @@ class UserService:
             raise es
 
     def check_password(self,hashed_password: str,password: str)->bool:
+        """
+            비밀번호가 유효한지 확인합니다.
+        """
         try:
             authorized=bcrypt.checkpw(password.encode('utf-8'),hashed_password.encode('utf-8'))
             return authorized
@@ -83,6 +89,9 @@ class UserService:
             raise es
     
     def generate_access_token(self,user_id: int)->str:
+        """
+            접근토큰을 생성합니다.
+        """
         try:
             jwt_expire_time=timedelta(seconds=self.conf.jwt_expire_time)
             utc_time_now=datetime.utcnow()
@@ -100,6 +109,9 @@ class UserService:
             raise es
 
     def is_user_id_exists(self,user_id: int)->bool:
+        """
+            유저의 번호가 존재하는지 확인합니다.
+        """
         try:
             user=self.user_model.select_user_by_id(user_id)
             if user==None:
@@ -110,6 +122,9 @@ class UserService:
             raise es
         
     def is_user_deleted_by_id(self,user_id: int)->bool:
+        """
+            유저의 번호에 해당하는 유저가 삭제된 기록이 있는지 확인합니다.
+        """
         try:
             user=self.user_model.select_user_by_id(user_id)
             if user!=None and user.deleted==True:
