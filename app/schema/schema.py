@@ -59,6 +59,11 @@ class PostLoginResponse(ResponseBase):
     
 class UserCredential(InsertUser):
     id: int
+    
+
+class GetUserResponse(ResponseBase):
+    data: UserResponse | None
+    
 
 
     

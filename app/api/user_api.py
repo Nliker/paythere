@@ -59,7 +59,6 @@ def user_router(app,services):
             if password_authorized==False:
                 raise exception.PasswordNotAuthorized()
             access_token=user_service.set_db(db).generate_access_token(user_credential.id)
-            print(access_token)
             return make_http_response_json(Created_201,{"access_token":access_token})
         except Exception as es:
                 if exception.exceptions_dict.get(es.__class__.__name__,False):
@@ -70,12 +69,24 @@ def user_router(app,services):
                     response.status_code=500
                     return exception.make_http_error(500,es.__str__())
     
-    # @user_api.get("{user_id}")
-    # async def get_user(user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
-    #     try:
-    #     except Exception as es:
-    #         if es.__class__.__name__ in inspect.getmembers(expection): 
-    #             expection.make_http_error(es)
-    #         else:
-    #             print(traceback.format_exc())
-    #             raise HTTPException(status_code=500, detail="Internel Server Error")
+    @user_api.get("/my",status_code=Get_200.status_code,response_model=GetUserResponse)
+    async def get_user(response: Response,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
+        try:
+            user_existance=user_service.set_db(db).is_user_id_exists(current_user_id)
+            if user_existance==False:
+                raise exception.UserIdNotExists()
+            user_deleted=user_service.set_db(db).is_user_deleted_by_id(current_user_id)
+            if user_deleted==True:
+                raise exception.UserWasDeleted()
+
+            user_info=user_service.set_db(db).get_user_info_by_id(current_user_id)
+
+            return make_http_response_json(Get_200,{"user":user_info})
+        except Exception as es:
+                if exception.exceptions_dict.get(es.__class__.__name__,False):
+                    response.status_code=es.status_code
+                    return exception.make_http_error(es.status_code,es.__str__())
+                else:
+                    print(traceback.format_exc())
+                    response.status_code=500
+                    return exception.make_http_error(500,es.__str__())
