@@ -63,7 +63,6 @@ class ProductService:
         """
         try:
             fitered_update_product=update_product.dict(exclude_unset=True)
-            print(fitered_update_product)
             updated_count=self.product_model.update_product_by_id(fitered_update_product,product_id)
             if updated_count==0:
                 return False
@@ -95,5 +94,15 @@ class ProductService:
             user_product_list=self.product_model.select_product_by_user_id_with_page(user_id,page)
             user_product_info_list=[ProductInfo(**product.dict()) for product in user_product_list if product.deleted==False]
             return user_product_info_list
+        except DatabaseError as es:
+            raise es
+        
+    def delete_product_by_id(self,product_id: int)->int:
+        """
+            상품 번호와 일치하는 상품을 삭제합니다.
+        """
+        try:
+            result=self.product_model.update_product_by_id({'deleted':True},product_id)
+            return result
         except DatabaseError as es:
             raise es
