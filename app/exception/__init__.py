@@ -18,5 +18,6 @@ exceptions_dict={
     "UserWasDeleted":True,
     "DatabaseError":True,
     "PhoneNumberNotExists":True,
-    "PasswordNotAuthorized":True
+    "PasswordNotAuthorized":True,
+    "UserIdNotExists":True
 }
