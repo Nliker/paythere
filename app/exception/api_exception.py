@@ -6,7 +6,7 @@ class PhoneNumberExists(Exception):
 class UserWasDeleted(Exception):
     status_code=401
     def __str__(self):
-        return "The user with phone number was deleted"
+        return "The user was deleted"
 
 class PhoneNumberNotExists(Exception):
     status_code=401
