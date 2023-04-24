@@ -16,5 +16,7 @@ def make_http_error(status_code,detail):
 exceptions_dict={
     "PhoneNumberExists":True,
     "UserWasDeleted":True,
-    "DatabaseError":True
+    "DatabaseError":True,
+    "PhoneNumberNotExists":True,
+    "PasswordNotAuthorized":True
 }
