@@ -122,12 +122,22 @@ def product_router(app,services):
                     return exception.make_http_error(500,es.__str__())
     
     @product_api.get("/",status_code=Get_200.status_code,response_model=GetProductsResponse)
-    async def get_products(response: Response,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
+    async def get_products(page: int,response: Response,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
         """
             상품들을 조회합니다.
         """
         try:
-            return make_http_response_json(Get_200,{"product":"good"})
+            user_existance=user_service.set_db(db).is_user_id_exists(current_user_id)
+            if user_existance==False:
+                raise exception.UserIdNotExists()
+
+            user_deleted=user_service.set_db(db).is_user_deleted_by_id(current_user_id)
+            if user_deleted==True:
+                raise exception.UserWasDeleted()
+
+            product_info_list=product_service.set_db(db).get_user_products_by_page(current_user_id,page)
+
+            return make_http_response_json(Get_200,{"products":product_info_list})
         except Exception as es:
                 if exception.exceptions_dict.get(es.__class__.__name__,False):
                     response.status_code=es.status_code
@@ -152,3 +162,4 @@ def product_router(app,services):
                     print(traceback.format_exc())
                     response.status_code=500
                     return exception.make_http_error(500,es.__str__())
+                
