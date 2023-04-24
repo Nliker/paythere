@@ -72,7 +72,7 @@ def user_router(app,services):
                     return exception.make_http_error(500,es.__str__())
     
     @user_api.get("/my",status_code=Get_200.status_code,response_model=GetUserResponse)
-    async def get_user(response: Response,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
+    async def get_my(response: Response,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
         """
             자신의 정보를 조회합니다.
         """
