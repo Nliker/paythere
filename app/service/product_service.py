@@ -1,7 +1,7 @@
 import os,sys
 
 sys.path.append((os.path.dirname(os.path.abspath(os.path.dirname(__file__)))))
-
+from typing import List
 from exception import DatabaseError
 from schema import *
 
@@ -75,11 +75,25 @@ class ProductService:
             raise es
         
     def is_product_authorized_by_user_id(self,user_id: int,product_id: int)->int:
+        """
+            상품이 유저의 소유인지를 확인합니다.
+        """
         try:
             product=self.product_model.select_product_by_id(product_id)
             if product.user_id==user_id:
                 return True
             else:
                 return False
+        except DatabaseError as es:
+            raise es
+        
+    def get_user_products_by_page(self,user_id: int,page: int)->List[ProductInfo]:
+        """
+            page당 10개의 유저의 상품 정보를 불러옵니다.(삭제되지 않은 상품만)
+        """
+        try:
+            user_product_list=self.product_model.select_product_by_user_id_with_page(user_id,page)
+            user_product_info_list=[ProductInfo(**product.dict()) for product in user_product_list if product.deleted==False]
+            return user_product_info_list
         except DatabaseError as es:
             raise es
