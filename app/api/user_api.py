@@ -1,13 +1,11 @@
 import sys,os
-from fastapi import Depends,APIRouter,HTTPException,Response
+from fastapi import Depends,APIRouter,Response
 from sql import get_db
 from sqlalchemy.orm import Session
-from sql import User,Product
 from schema import *
 from auth import verify_token
 import traceback
 import exception
-import inspect
 from response import *
 
 sys.path.append((os.path.dirname(os.path.abspath(os.path.dirname(__file__)))))
@@ -21,7 +19,7 @@ def user_router(app,services):
     
     app.include_router(user_api)
 
-    @user_api.post("/sign_up",status_code=Created_201.status_code)
+    @user_api.post("/sign_up",status_code=Created_201.status_code,response_model=CreateUserResponse)
     async def post_sign_up(response: Response,new_user: CreateUser,db: Session = Depends(get_db)):
         try:
             phone_number_existance=user_service.set_db(db).is_phone_number_existance(new_user.phone_number)

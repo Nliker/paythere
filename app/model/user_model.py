@@ -14,14 +14,12 @@ class UserModel:
             새로운 유저의 정보를 삽입합니다.
         """
         try:
-            print(new_user)
             new_user=sql.User(
                 **new_user.dict()
             )
             self.db.add(new_user)
         except:
             self.db.rollback()
-            print(traceback.format_exc())
             raise DatabaseError()
         else:
             self.db.commit()

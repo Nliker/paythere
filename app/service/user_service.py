@@ -22,7 +22,6 @@ class UserService:
         try:
             password=new_user.password
             hashed_password=bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt())
-            print(type(new_user))
             inserted_user=self.user_model.insert_user(InsertUser(**new_user.dict(),hashed_password=hashed_password))
     
             return inserted_user.id

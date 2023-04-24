@@ -25,9 +25,23 @@ class User(UserBase):
 class UserInfo(UserBase):
     id: int
     created_at: datetime
-    class Config:
-        orm_mode = True
-        
+
+
+class UserData(BaseModel):
+    user:UserInfo
+
+
+class Meta(BaseModel):
+    code: int
+    message: str
+
+class ResponseBase(BaseModel):
+    meta: Meta
+
+
+class CreateUserResponse(ResponseBase):
+    data: UserData | None
+
 
 
     
