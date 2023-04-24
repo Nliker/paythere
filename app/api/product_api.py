@@ -89,7 +89,29 @@ def product_router(app,services):
             상품을 조회합니다.
         """
         try:
-            return make_http_response_json(Get_200,{"product":"good"})
+            user_existance=user_service.set_db(db).is_user_id_exists(current_user_id)
+            if user_existance==False:
+                raise exception.UserIdNotExists()
+
+            user_deleted=user_service.set_db(db).is_user_deleted_by_id(current_user_id)
+            if user_deleted==True:
+                raise exception.UserWasDeleted()
+
+            product_existance=product_service.set_db(db).is_product_id_exists(product_id)
+            if product_existance==False:
+                raise exception.ProductIdNotExists()
+                
+            product_deleted=product_service.set_db(db).is_product_deleted_by_id(product_id)
+            if product_deleted==True:
+                raise exception.ProductWasDeleted()
+            
+            is_product_authorized_by_user_id=product_service.set_db(db).is_product_authorized_by_user_id(current_user_id,product_id)
+            if is_product_authorized_by_user_id==False:
+                raise exception.ProductNotAuthorizedByUser()
+
+            product_info=product_service.set_db(db).get_product_info_by_id(product_id)
+
+            return make_http_response_json(Get_200,{"product":product_info})
         except Exception as es:
                 if exception.exceptions_dict.get(es.__class__.__name__,False):
                     response.status_code=es.status_code
