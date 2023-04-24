@@ -19,5 +19,9 @@ exceptions_dict={
     "DatabaseError":True,
     "PhoneNumberNotExists":True,
     "PasswordNotAuthorized":True,
-    "UserIdNotExists":True
+    "UserIdNotExists":True,
+    "ProductIdNotExists":True,
+    "ProductWasDeleted":True,
+    "ProductUpdatFailed":True,
+    "ProductNotAuthorizedByUser":True
 }
