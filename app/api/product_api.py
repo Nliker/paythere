@@ -30,7 +30,8 @@ def product_router(app,services):
             if user_deleted==True:
                 raise exception.UserWasDeleted()
             
-            created_product_info=product_service.set_db(db).create_new_product(new_product,current_user_id):
+            created_product_id=product_service.set_db(db).create_new_product(new_product,current_user_id)
+            created_product_info=product_service.set_db(db).get_product_info_by_id(created_product_id)
             
             return make_http_response_json(Created_201,{"product":created_product_info})
         except Exception as es:
