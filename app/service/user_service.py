@@ -82,7 +82,7 @@ class UserService:
         except DatabaseError as es:
             raise es
     
-    def generate_access_token(self,user_id)->str:
+    def generate_access_token(self,user_id: int)->str:
         try:
             jwt_expire_time=timedelta(seconds=self.conf.jwt_expire_time)
             utc_time_now=datetime.utcnow()
@@ -95,8 +95,27 @@ class UserService:
             }
 
             access_token=jwt.encode(payload,self.conf.jwt_secret_key,'HS256')
-            print(access_token)
             return access_token
+        except DatabaseError as es:
+            raise es
+
+    def is_user_id_exists(self,user_id: int)->bool:
+        try:
+            user=self.user_model.select_user_by_id(user_id)
+            if user==None:
+                return False
+            else:
+                return True
+        except DatabaseError as es:
+            raise es
+        
+    def is_user_deleted_by_id(self,user_id: int)->bool:
+        try:
+            user=self.user_model.select_user_by_id(user_id)
+            if user!=None and user.deleted==True:
+                return True
+            else:
+                return False
         except DatabaseError as es:
             raise es
 
