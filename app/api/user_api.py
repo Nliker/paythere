@@ -21,6 +21,9 @@ def user_router(app,services):
 
     @user_api.post("/sign_up",status_code=Created_201.status_code,response_model=CreateUserResponse)
     async def post_sign_up(response: Response,new_user: CreateUser,db: Session = Depends(get_db)):
+        """
+            회원가입을 합니다.
+        """
         try:
             phone_number_existance=user_service.set_db(db).is_phone_number_existance(new_user.phone_number)
             if phone_number_existance==True:

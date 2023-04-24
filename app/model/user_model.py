@@ -28,6 +28,9 @@ class UserModel:
             return new_user
         
     def select_user_by_phone_number(self,phone_number: str)->User:
+        """
+            핸드폰 번호를 가진 유저를 조회합니다.
+        """
         try:
             user=self.db.query(sql.User).filter(sql.User.phone_number==phone_number).first()
         except:
@@ -38,6 +41,9 @@ class UserModel:
             return user
 
     def select_user_by_id(self,user_id: int)->User:
+        """
+            유저 번호와 일치하는 유저를 조회합니다.
+        """
         try:
             user=self.db.query(sql.User).filter(sql.User.id==user_id).first()
         except:
