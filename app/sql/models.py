@@ -27,4 +27,4 @@ class Product(Base):
     size=Column(String)
     created_at=Column(DateTime)
     updated_at=Column(DateTime)
-    deleted=Column(Boolean)
+    deleted=Column(Boolean,default=False)
