@@ -64,6 +64,9 @@ class UpdateProduct(BaseModel):
 class ProductInfo(ProductBase):
     id: int
     created_at: datetime
+    
+class UpdatedProductInfo(ProductInfo):
+    updated_at: datetime
 
 class InsertUser(UserBase):
     hashed_password: str
@@ -90,11 +93,15 @@ class UserResponse(BaseModel):
 class UsersResponse(BaseModel):
     users: List[UserInfo]
 
+
 class ProductResponse(BaseModel):
     product: ProductInfo
 
 class ProductsResponse(BaseModel):
     products: List[ProductInfo]
+
+class UpdatedProductResponse(BaseModel):
+    product: UpdatedProductInfo
 
 
 class UserCredential(InsertUser):
@@ -119,7 +126,7 @@ class PostProductResponse(ResponseBase):
     data: ProductResponse | None
 
 class PutProductResponse(ResponseBase):
-    data: ProductResponse | None
+    data: UpdatedProductResponse | None
 
 class GetProductResponse(ResponseBase):
     data: ProductResponse | None
