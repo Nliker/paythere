@@ -10,11 +10,14 @@ User->model에서 불러온 데이터형식
 class UserBase(BaseModel):
     phone_number: str
 
+
+
 class InsertUser(UserBase):
     hashed_password: str
 
 class CreateUser(UserBase):
     password: str
+
 
 class User(UserBase):
     id: int
@@ -27,21 +30,24 @@ class UserInfo(UserBase):
     created_at: datetime
 
 
-class UserData(BaseModel):
+
+class UserResponse(BaseModel):
     user:UserInfo
 
+class UsersResponse(BaseModel):
+    users: List[UserInfo]
 
 class Meta(BaseModel):
     code: int
     message: str
 
+
 class ResponseBase(BaseModel):
     meta: Meta
 
 
-class CreateUserResponse(ResponseBase):
-    data: UserData | None
-
+class PostSignUpResponse(ResponseBase):
+    data: UserResponse | None
 
 
     

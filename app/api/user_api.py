@@ -19,7 +19,7 @@ def user_router(app,services):
     
     app.include_router(user_api)
 
-    @user_api.post("/sign_up",status_code=Created_201.status_code,response_model=CreateUserResponse)
+    @user_api.post("/sign_up",status_code=Created_201.status_code,response_model=PostSignUpResponse)
     async def post_sign_up(response: Response,new_user: CreateUser,db: Session = Depends(get_db)):
         """
             회원가입을 합니다.
