@@ -50,4 +50,13 @@ class PostSignUpResponse(ResponseBase):
     data: UserResponse | None
 
 
+
+class AccessToken(BaseModel):
+    access_token: str  
     
+class PostLoginResponse(ResponseBase):  
+    data: AccessToken
+    
+    
+
+
