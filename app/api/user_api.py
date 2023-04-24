@@ -15,7 +15,6 @@ user_api=APIRouter(prefix="/users",tags=["users"])
 
 def user_router(app,services):
     user_service=services.user_service
-    product_service=services.product_service
     
     app.include_router(user_api)
 
