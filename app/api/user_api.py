@@ -47,6 +47,9 @@ def user_router(app,services):
 
     @user_api.post("/login",status_code=Created_201.status_code,response_model=PostLoginResponse)
     async def post_login(response: Response,credential: CreateUser,db: Session = Depends(get_db)):
+        """
+            로그인을 합니다.
+        """
         try:
             phone_number_existance=user_service.set_db(db).is_phone_number_exists(credential.phone_number)
             if phone_number_existance==False:
@@ -70,6 +73,9 @@ def user_router(app,services):
     
     @user_api.get("/my",status_code=Get_200.status_code,response_model=GetUserResponse)
     async def get_user(response: Response,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
+        """
+            자신의 정보를 조회합니다.
+        """
         try:
             user_existance=user_service.set_db(db).is_user_id_exists(current_user_id)
             if user_existance==False:
