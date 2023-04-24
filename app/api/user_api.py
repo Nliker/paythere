@@ -46,15 +46,29 @@ def user_router(app,services):
                 response.status_code=500
                 return exception.make_http_error(500,es.__str__())
 
-    # @user_api.post("/login")
-    # async def post_login(phone_number: str,password: str):
-    #     try:
-    #     except Exception as es:
-    #         if es.__class__.__name__ in inspect.getmembers(expection): 
-    #             expection.make_http_error(es)
-    #         else:
-    #             print(traceback.format_exc())
-    #             raise HTTPException(status_code=500, detail="Internel Server Error")
+    @user_api.post("/login",status_code=Created_201.status_code,response_model=PostLoginResponse)
+    async def post_login(response: Response,phone_number: str,password: str,db: Session = Depends(get_db)):
+        try:
+            phone_number_existance=user_service.set_db(db).is_phone_number_exists(phone_number)
+            if phone_number_existance==True:
+                raise exception.PhoneNumberNotExists()
+
+            user_credential=user_service.set_db(db).get_user_credential_by_phone_number(phone_number)
+
+            password_authorized=user_service.set_db(db).check_password(user_credential.hashed_password,password)
+            if password_authorized==False:
+                raise exception.PasswordNotAuthorized()
+            access_token=user_service.set_db(db).generate_access_token(user_credential.id)
+
+            return make_http_response_json(Created_201,{"access_token":access_token})
+        except Exception as es:
+                if exception.exceptions_dict.get(es.__class__.__name__,False):
+                    response.status_code=es.status_code
+                    return exception.make_http_error(es.status_code,es.__str__())
+                else:
+                    print(traceback.format_exc())
+                    response.status_code=500
+                    return exception.make_http_error(500,es.__str__())
     
     # @user_api.get("{user_id}")
     # async def get_user(user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
