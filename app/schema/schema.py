@@ -3,9 +3,17 @@ from pydantic import BaseModel
 from datetime import datetime,date
 
 """
-UserInfo->service에서 api로 나가는 데이터 형식
-User->model에서 불러온 데이터형식
+UserInfo->클라이언트에게 보여지는 데이터
+User->user의 원본 데이터
 """
+
+
+class Meta(BaseModel):
+    code: int
+    message: str
+    
+class ResponseBase(BaseModel):
+    meta: Meta
 
 class UserBase(BaseModel):
     phone_number: str
@@ -15,6 +23,7 @@ class UserBase(BaseModel):
 class InsertUser(UserBase):
     hashed_password: str
 
+
 class CreateUser(UserBase):
     password: str
 
@@ -23,12 +32,11 @@ class User(UserBase):
     id: int
     updated_at: datetime | None
     created_at: datetime
-    deleted: datetime
+    deleted: bool
 
 class UserInfo(UserBase):
     id: int
     created_at: datetime
-
 
 
 class UserResponse(BaseModel):
@@ -37,29 +45,22 @@ class UserResponse(BaseModel):
 class UsersResponse(BaseModel):
     users: List[UserInfo]
 
-class Meta(BaseModel):
-    code: int
-    message: str
 
-
-class ResponseBase(BaseModel):
-    meta: Meta
-
-
-class PostSignUpResponse(ResponseBase):
-    data: UserResponse | None
+class UserCredential(InsertUser):
+    id: int
 
 
 
 class AccessToken(BaseModel):
     access_token: str  
+
+
+
+class PostSignUpResponse(ResponseBase):
+    data: UserResponse | None
     
 class PostLoginResponse(ResponseBase):  
     data: AccessToken | None
-    
-class UserCredential(InsertUser):
-    id: int
-    
 
 class GetUserResponse(ResponseBase):
     data: UserResponse | None
