@@ -4,6 +4,7 @@ from exception import DatabaseError
 sys.path.append((os.path.dirname(os.path.abspath(os.path.dirname(__file__)))))
 import traceback
 from schema import *
+from typing import List
 
 class ProductModel:
     def set_db(self,db):
@@ -51,3 +52,15 @@ class ProductModel:
         else:
             self.db.commit()
             return result
+
+    def select_product_by_user_id_with_page(self,user_id: int,page: int)->List[Product]:
+        """
+            page당 10개의 유저의 상품들을 조회합니다.
+        """
+        try:
+            product_list=self.db.query(sql.Product).filter(sql.Product.user_id==user_id).order_by(sql.Product.created_at.asc()).limit(page*10).all()
+        except:
+            raise DatabaseError()
+        else:
+            product_list=[Product(**product.__dict__) for product in product_list]
+            return product_list
