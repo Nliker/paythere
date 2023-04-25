@@ -8,3 +8,13 @@ services:
       - '3000:3306'
     environment:
       - TZ=Asia/Seoul
+
+  paythere_back:
+    build: ./app
+    container_name: paythere_back
+    depends_on: 
+      - mysql
+    restart: always
+    ports:
+      - "0.0.0.0:5001:5001"
+

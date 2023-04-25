@@ -28,8 +28,8 @@ env_mods={
         Envs(
             user="root",
             password="test_mysql",
-            host="localhost",
-            port=3000,
+            host="mysql",
+            port=3306,
             database="paythere",
             jwt_secret_key="jwt_paythere",
             jwt_expire_time=60*60*24*7,
@@ -39,7 +39,7 @@ env_mods={
         Envs(
             user="test",
             password="test_mysql",
-            host="localhost",
+            host="127.0.0.1",
             port=3001,
             database="paythere_test",
             jwt_secret_key="jwt_paythere",
@@ -51,8 +51,8 @@ env_mods={
         Envs(
             user="root",
             password="test_mysql",
-            host="localhost",
-            port=3000,
+            host="127.0.0.1",
+            port=3001,
             database="paythere",
             jwt_secret_key="jwt_paythere",
             jwt_expire_time=60*60*24*7,
