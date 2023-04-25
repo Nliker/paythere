@@ -17,10 +17,12 @@ class ProductService:
 
     def create_new_product(self,new_product: CreateProduct,user_id: int)->int:
         """
-            새로운 상품을 생성합니다.
+            새로운 상품을 생성과 함께 초성정보를 생성합니다.
         """
         try:
-            inserted_product=self.product_model.insert_product(InsertProduct(**new_product.dict(),user_id=user_id))
+            initial_name=korean_to_initial(new_product.name)
+
+            inserted_product=self.product_model.insert_product(InsertProduct(**new_product.dict(),user_id=user_id),initial_name)
             
             return inserted_product.id
         except DatabaseError as es:
@@ -64,7 +66,11 @@ class ProductService:
         """
         try:
             fitered_update_product=update_product.dict(exclude_unset=True)
-            updated_count=self.product_model.update_product_by_id(fitered_update_product,product_id)
+
+            name=fitered_update_product.get("name",False)
+            initial_name=korean_to_initial(name)
+
+            updated_count=self.product_model.update_product_by_id(fitered_update_product,product_id,initial_name)
             if updated_count==0:
                 return False
             else:
@@ -118,13 +124,12 @@ class ProductService:
             
             #추출한 초성과 일치할 경우 초성검색모드로 돌입합니다.
             if initial_name==name:
-                user_product_list=self.product_model.select_product_by_user_id_with_name(initial_name,user_id)
+                user_product_list=self.product_model.select_product_by_user_id_with_initial(initial_name,user_id)
             #추출한 초성과 일치하지 않을 경우 일반 검색모드로 돌입합니다.
             else:
-                user_product_list=self.product_model.select_product_by_user_id_with_inital(name,user_id)
+                user_product_list=self.product_model.select_product_by_user_id_with_name(name,user_id)
             
             user_product_info_list=[ProductInfo(**product.dict()) for product in user_product_list if product.deleted==False]
-            print(user_product_info_list)
             return user_product_info_list
         except DatabaseError as es:
             raise es
