@@ -28,3 +28,9 @@ class Product(Base):
     created_at=Column(DateTime)
     updated_at=Column(DateTime)
     deleted=Column(Boolean,default=False)
+    
+class ProductInitial(Base):
+    __tablename__ = "products_initial"
+
+    product_id = Column(Integer)
+    initial=Column(String)
