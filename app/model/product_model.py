@@ -102,7 +102,7 @@ class ProductModel:
         """
         try:
             like_query=f"%{initial}%"
-            product_list=self.db.query(sql.ProductInitial,sql.Product).filter(sql.ProductInitial.initial.like(like_query)).join(sql.Product,sql.Product.id==sql.ProductInitial.product_id).all()
+            product_list=self.db.query(sql.ProductInitial,sql.Product).filter(sql.ProductInitial.initial.like(like_query)).join(sql.Product,sql.Product.id==sql.ProductInitial.product_id).filter(sql.Product.user_id==user_id).all()
         except:
             print(traceback.format_exc())
             raise DatabaseError()
