@@ -58,4 +58,8 @@ class TokenNotExists(Exception):
     def __str__(self):
         return "The access_token is not exists"
     
+class UserLogouted(Exception):
+    status_code=401
+    def __str__(self):
+        return "The user was logouted"
 

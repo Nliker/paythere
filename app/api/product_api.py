@@ -17,11 +17,18 @@ def product_router(app,services):
     app.include_router(product_api)
 
     @product_api.post("/",status_code=Created_201.status_code,response_model=PostProductResponse)
-    async def post_product(response: Response,new_product:CreateProduct,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
+    async def post_product(response: Response,new_product:CreateProduct,credentials: dict = Depends(verify_token),db: Session = Depends(get_db)):
         """
             상품을 생성합니다.
         """
         try:
+            current_user_id=credentials["current_user_id"]
+            access_token=credentials["access_token"]
+
+            access_token_logouted=user_service.set_db(db).is_user_access_token_logouted(access_token)
+            if access_token_logouted==True:
+                raise exception.UserLogouted()
+
             user_existance=user_service.set_db(db).is_user_id_exists(current_user_id)
             if user_existance==False:
                 raise exception.UserIdNotExists()
@@ -44,11 +51,18 @@ def product_router(app,services):
                     return exception.make_http_error(500,es.__str__())
 
     @product_api.put("/{product_id}",status_code=Created_201.status_code,response_model=PutProductResponse)
-    async def put_product(response: Response,product_id: int,update_product:UpdateProduct,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
+    async def put_product(response: Response,product_id: int,update_product:UpdateProduct,credentials: dict = Depends(verify_token),db: Session = Depends(get_db)):
         """
             상품의 정보를 업데이트 합니다.
         """
         try:
+            current_user_id=credentials["current_user_id"]
+            access_token=credentials["access_token"]
+
+            access_token_logouted=user_service.set_db(db).is_user_access_token_logouted(access_token)
+            if access_token_logouted==True:
+                raise exception.UserLogouted()
+
             user_existance=user_service.set_db(db).is_user_id_exists(current_user_id)
             if user_existance==False:
                 raise exception.UserIdNotExists()
@@ -84,11 +98,18 @@ def product_router(app,services):
                     return exception.make_http_error(500,es.__str__())
     
     @product_api.get("/{product_id}",status_code=Get_200.status_code,response_model=GetProductResponse)
-    async def get_product(response: Response,product_id: int,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
+    async def get_product(response: Response,product_id: int,credentials: dict = Depends(verify_token),db: Session = Depends(get_db)):
         """
             상품을 조회합니다.
         """
         try:
+            current_user_id=credentials["current_user_id"]
+            access_token=credentials["access_token"]
+
+            access_token_logouted=user_service.set_db(db).is_user_access_token_logouted(access_token)
+            if access_token_logouted==True:
+                raise exception.UserLogouted()
+
             user_existance=user_service.set_db(db).is_user_id_exists(current_user_id)
             if user_existance==False:
                 raise exception.UserIdNotExists()
@@ -122,11 +143,18 @@ def product_router(app,services):
                     return exception.make_http_error(500,es.__str__())
     
     @product_api.get("/",status_code=Get_200.status_code,response_model=GetProductsResponse)
-    async def get_products(page: int,response: Response,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
+    async def get_products(page: int,response: Response,credentials: dict = Depends(verify_token),db: Session = Depends(get_db)):
         """
             상품들을 조회합니다.
         """
         try:
+            current_user_id=credentials["current_user_id"]
+            access_token=credentials["access_token"]
+
+            access_token_logouted=user_service.set_db(db).is_user_access_token_logouted(access_token)
+            if access_token_logouted==True:
+                raise exception.UserLogouted()
+
             user_existance=user_service.set_db(db).is_user_id_exists(current_user_id)
             if user_existance==False:
                 raise exception.UserIdNotExists()
@@ -148,11 +176,18 @@ def product_router(app,services):
                     return exception.make_http_error(500,es.__str__())
                 
     @product_api.delete("/{product_id}",status_code=Get_200.status_code,response_model=DeleteProductResponse)
-    async def delete_product(response: Response,product_id: int,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
+    async def delete_product(response: Response,product_id: int,credentials: dict = Depends(verify_token),db: Session = Depends(get_db)):
         """
             상품을 삭제합니다.
         """
         try:
+            current_user_id=credentials["current_user_id"]
+            access_token=credentials["access_token"]
+            
+            access_token_logouted=user_service.set_db(db).is_user_access_token_logouted(access_token)
+            if access_token_logouted==True:
+                raise exception.UserLogouted()
+
             user_existance=user_service.set_db(db).is_user_id_exists(current_user_id)
             if user_existance==False:
                 raise exception.UserIdNotExists()

@@ -64,3 +64,35 @@ class UserModel:
                 user=UserCredential(**user.__dict__)
             return user
     
+    def delete_token(self,access_token: str)->int:
+        try:
+            result=self.db.query(sql.Token).filter(sql.Token.access_token==access_token).delete()
+        except:
+            self.db.rollback()
+            raise DatabaseError()
+        else:
+            self.db.commit()
+            return result
+
+    def insert_token(self,access_token: str)->bool:
+        try:
+            new_access_token=sql.Token(access_token=access_token)
+            self.db.add(new_access_token)
+        except:
+            self.db.rollback()
+            raise DatabaseError()
+        else:
+            self.db.commit()
+            return True
+        
+    def select_token(self,access_token: str)->TokenBase:
+        try:
+            access_token=self.db.query(sql.Token).filter(sql.Token.access_token==access_token).first()
+        except:
+            raise DatabaseError()
+        else:
+            if access_token!=None:
+                access_token=TokenBase(**access_token.__dict__)
+            return access_token
+            
+        

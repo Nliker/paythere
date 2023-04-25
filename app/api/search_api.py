@@ -16,11 +16,18 @@ def search_router(app,services):
     app.include_router(search_api)
     
     @search_api.get("/")
-    async def get_search_products(response: Response,name: Optional[str]=None,current_user_id: int = Depends(verify_token),db: Session = Depends(get_db)):
+    async def get_search_products(response: Response,name: Optional[str]=None,credentials: dict = Depends(verify_token),db: Session = Depends(get_db)):
         """
             상품의 이름을 검색합니다.
         """
         try:
+            current_user_id=credentials["current_user_id"]
+            access_token=credentials["access_token"]
+
+            access_token_logouted=user_service.set_db(db).is_user_access_token_logouted(access_token)
+            if access_token_logouted==True:
+                raise exception.UserLogouted()
+
             user_existance=user_service.set_db(db).is_user_id_exists(current_user_id)
             if user_existance==False:
                 raise exception.UserIdNotExists()

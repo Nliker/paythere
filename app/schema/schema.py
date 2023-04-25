@@ -21,6 +21,9 @@ class UserBase(BaseModel):
     phone_number: str
 
 
+class TokenBase(BaseModel):
+    access_token: str
+
 class ProductBase(BaseModel):
     category: str
     net_price: Decimal
@@ -117,6 +120,9 @@ class PostSignUpResponse(ResponseBase):
     
 class PostLoginResponse(ResponseBase):  
     data: AccessToken | None
+
+class PostLogoutResponse(ResponseBase):
+    data: str | None
 
 class GetUserResponse(ResponseBase):
     data: UserResponse | None

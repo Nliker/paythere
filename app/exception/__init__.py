@@ -23,5 +23,6 @@ exceptions_dict={
     "ProductIdNotExists":True,
     "ProductWasDeleted":True,
     "ProductUpdatFailed":True,
-    "ProductNotAuthorizedByUser":True
+    "ProductNotAuthorizedByUser":True,
+    "UserLogouted":True
 }

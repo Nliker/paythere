@@ -134,8 +134,36 @@ class UserService:
         except DatabaseError as es:
             raise es
 
+    def user_logout(self,access_token: str)->int:
+        """
+            유저의 로그인 기록을 삭제합니다.(로그아웃)
+        """
+        try:
+            result=self.user_model.delete_token(access_token)
+            return result
+        except DatabaseError as es:
+            raise es
 
-        
+    def user_login(self,access_token: str)->bool:
+        """
+            유저의 로그인 기록을 생성합니다.(로그인)
+        """
+        try:
+            result=self.user_model.insert_token(access_token)
+            return result
+        except DatabaseError as es:
+            raise es
     
+    def is_user_access_token_logouted(self,access_token: str)->bool:
+        """
+        """
+        try:
+            result=self.user_model.select_token(access_token)
+            if result==None:
+                return True
+            else:
+                return False
+        except DatabaseError as es:
+            raise es
 
         
