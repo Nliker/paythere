@@ -4,6 +4,7 @@ sys.path.append((os.path.dirname(os.path.abspath(os.path.dirname(__file__)))))
 from typing import List
 from exception import DatabaseError
 from schema import *
+from tool import korean_to_initial
 
 class ProductService:
     def __init__(self,product_model,conf):
@@ -104,5 +105,26 @@ class ProductService:
         try:
             result=self.product_model.update_product_by_id({'deleted':True},product_id)
             return result
+        except DatabaseError as es:
+            raise es
+        
+    def get_user_products_by_name(self,name: str,user_id: int)->List[ProductInfo]:
+        """
+            상품의 이름을 통해 검색한 정보들을 불러옵니다.
+        """
+        try:
+            #한글문자열의 초성만을 추출합니다.
+            initial_name=korean_to_initial(name)
+            
+            #추출한 초성과 일치할 경우 초성검색모드로 돌입합니다.
+            if initial_name==name:
+                user_product_list=self.product_model.select_product_by_user_id_with_name(initial_name,user_id)
+            #추출한 초성과 일치하지 않을 경우 일반 검색모드로 돌입합니다.
+            else:
+                user_product_list=self.product_model.select_product_by_user_id_with_inital(name,user_id)
+            
+            user_product_info_list=[ProductInfo(**product.dict()) for product in user_product_list if product.deleted==False]
+            print(user_product_info_list)
+            return user_product_info_list
         except DatabaseError as es:
             raise es
