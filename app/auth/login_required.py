@@ -24,4 +24,7 @@ async def verify_token(access_token: Union  [str, None]=Header(default=None)):
         error=exception.TokenNotExists()
         raise HTTPException(status_code=error.status_code,detail=error.__str__())
     
-    return payload['user_id']
+    return {
+        "current_user_id":payload['user_id'],
+        "access_token":access_token
+    }
