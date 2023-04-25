@@ -64,3 +64,30 @@ class ProductModel:
         else:
             product_list=[Product(**product.__dict__) for product in product_list]
             return product_list
+        
+
+    def select_product_by_user_id_with_name(self,name: str,user_id: int)->List[Product]:
+        """
+            상풍의 이름이 포함된 상품들을 조회합니다.
+        """
+        try:
+            like_query=f"%{name}%"
+            product_list=self.db.query(sql.Product).filter(sql.Product.user_id==user_id,sql.Product.name.like(like_query)).all()
+        except:
+            raise DatabaseError()
+        else:
+            product_list=[Product(**product.__dict__) for product in product_list]
+            return product_list
+    
+    def select_product_by_user_id_with_name(self,initial: str,user_id: int)->List[Product]:
+        """
+            상풍의 
+        """
+        try:
+            like_query=f"%{initial}%"
+            product_list=self.db.query(sql.ProductInitial).filter(sql.ProductInitial.initial.like(like_query)).join(sql.Product.id).filter(sql.Product.id==user_id).all()
+        except:
+            raise DatabaseError()
+        else:
+            product_list=[Product(**product.__dict__) for product in product_list]
+            return product_list
