@@ -1,13 +1,28 @@
-def korean_check(words):
+def korean_check(words)->bool:
+    """
+        완전한 한글음으로 이루어진 단어인지 확인
+    """
     for ch in list(words.strip()):
         if ch==" ":
             continue
         #한글 완전음인지 확인
         if ch<'가' or ch>'힣':
-            print("완전음 아님")
             return False
 
     return True
+
+# def check_english(words)->bool:
+#     """
+#         알파벳이 포함되어 있는지 확인
+#     """
+#     for ch in list(words.strip()):
+#         if ch==" ":
+#             continue
+#         if "a" <=ch and ch<='z':
+#             return True
+#         if "A" <=ch and ch<='Z':
+#             return True
+#     return False
 
 def korean_to_initial(korean_word):
     """
