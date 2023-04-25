@@ -49,14 +49,15 @@ class user1:
     user_id=1
     phone_number="01011111111"
     password="11111111"
-    hash_password=generate_hashed_password("11111111")
+    hashed_password=generate_hashed_password("11111111")
 
 #가입 후 로그인 한 유저
 class user2:
     user_id=2
     phone_number="01022222222"
     password="22222222"
-    access_token=generate_hashed_password("22222222")
+    hashed_password=generate_hashed_password("22222222")
+    access_token=generate_token(user_id)
     
     
     
@@ -93,12 +94,12 @@ def setup_funtion():
         new_users=[{
                         'id':user1.user_id,
                         'phone_number':user1.phone_number,
-                        'hashed_password':user1.hash_password
+                        'hashed_password':user1.hashed_password
                     },
                     {
                         'id':user2.user_id,
                         'phone_number':user2.phone_number,
-                        'hashed_password':user2.hash_password
+                        'hashed_password':user2.hashed_password
                     }
         ]
         new_tokens=[{
