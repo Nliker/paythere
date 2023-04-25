@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from config import make_conf_dict
 import uvicorn
-from api import user_router,product_router
+from api import user_router,product_router,search_router
 from model import UserModel,ProductModel
 from service import UserService,ProductService
 
@@ -26,6 +26,8 @@ def create_app():
 
     user_router(app,services)
     product_router(app,services)
+    search_router(app,services)
+
     return app
 
 

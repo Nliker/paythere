@@ -1,5 +1,6 @@
 from sqlalchemy import Boolean,Column, Integer, String,DateTime,DECIMAL
 from .database import Base
+from sqlalchemy.orm import relationship
 
 
 class User(Base):
@@ -32,5 +33,5 @@ class Product(Base):
 class ProductInitial(Base):
     __tablename__ = "products_initial"
 
-    product_id = Column(Integer)
+    product_id = Column(Integer,primary_key=True)
     initial=Column(String)
