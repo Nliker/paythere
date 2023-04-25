@@ -35,3 +35,8 @@ class ProductInitial(Base):
 
     product_id = Column(Integer,primary_key=True)
     initial=Column(String)
+
+class Token(Base):
+    __tablename__ = "tokens"
+
+    access_token = Column(String,primary_key=True)
