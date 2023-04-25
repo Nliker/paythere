@@ -7,6 +7,7 @@ from auth import verify_token
 import traceback
 import exception
 from response import *
+from validation import *
 
 sys.path.append((os.path.dirname(os.path.abspath(os.path.dirname(__file__)))))
 
@@ -24,6 +25,7 @@ def user_router(app,services):
             회원가입을 합니다.
         """
         try:
+            validate_user_auth(new_user.dict())
             phone_number_existance=user_service.set_db(db).is_phone_number_exists(new_user.phone_number)
             if phone_number_existance==True:
                 raise exception.PhoneNumberExists()
@@ -51,6 +53,7 @@ def user_router(app,services):
             로그인을 합니다.
         """
         try:
+            validate_user_auth(credential.dict())
             phone_number_existance=user_service.set_db(db).is_phone_number_exists(credential.phone_number)
             if phone_number_existance==False:
                 raise exception.PhoneNumberNotExists()

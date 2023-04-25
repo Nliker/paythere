@@ -7,6 +7,7 @@ from auth import verify_token
 import traceback
 import exception
 from response import *
+from validation import *
 
 product_api=APIRouter(prefix="/products",tags=["products"])
 
@@ -22,6 +23,7 @@ def product_router(app,services):
             상품을 생성합니다.
         """
         try:
+            validate_create_product(new_product.dict())
             current_user_id=credentials["current_user_id"]
             access_token=credentials["access_token"]
 
@@ -56,6 +58,7 @@ def product_router(app,services):
             상품의 정보를 업데이트 합니다.
         """
         try:
+            validate_create_product(update_product.dict())
             current_user_id=credentials["current_user_id"]
             access_token=credentials["access_token"]
 
