@@ -3,9 +3,9 @@
 >## Table of Contents
 
 - [Execution](#Execution)
-- [APIdocs](#API)
+- [APIdocs](#APIdocs)
 - [DB](#DB)
-- [FolderArchitecture](#FolderArchitecture)
+- [Architecture](#Architecture)
 - [CodeRule](#CodeRule)
 - [Technic](#Technic)
 - [Retrospective](#Retrospective)
@@ -288,7 +288,7 @@
         ...
     ```
 
-*   개발단계
+*   ### 개발단계
     
     fastapi라는 프레임워크를 잘 다뤄보지 않아 러닝커브가 심하게 왔었다.그리고 docker와 mysql의 세팅,데이터베이스를 설계하는 데 일의 순서가 없이 구현하는데만 급급했다.A라는 작업을 하다가 B라는 작업을 할때 A에서 작업을 했던 기억과 노하우가 금방 사라졌고 다시 A작업으로 돌아왔을 땐 효율이 극한으로 떨어졌다.이런 점들에서 개발단계의 순서를 개발 초기에 명확하게 구분하고 실행하는 것의 중요성을 느꼈다.예를 들면 fastapi에 pydantic을 사용하여 스키마들을 정의하는데 함수와 변수에 스키마들을 적용하가며 동시에 스키마를 만드니까 스키마의 변형이 너무 자주 일어났다.
     미리 스키마를 모두 만들어 놓고 그 틀 안에서 적용해 갔으면 개발효율이 늘었지 않았을까 싶다.
