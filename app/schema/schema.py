@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional,Union
 from pydantic import BaseModel
 from datetime import datetime,date
 from decimal import Decimal

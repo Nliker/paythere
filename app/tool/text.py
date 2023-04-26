@@ -3,9 +3,15 @@ def korean_check(words)->bool:
         완전한 한글음으로 이루어진 단어인지 확인
     """
     for ch in list(words.strip()):
+        #공백 통과
         if ch==" ":
             continue
-        #한글 완전음인지 확인
+        #알파벳 통과 통과
+        if "a" <=ch and ch<='z':
+            continue
+        if "A" <=ch and ch<='Z':
+            continue
+        #완전음 아니면 실패
         if ch<'가' or ch>'힣':
             return False
 

@@ -15,7 +15,7 @@ def search_router(app,services):
 
     app.include_router(search_api)
     
-    @search_api.get("/")
+    @search_api.get("/products")
     async def get_search_products(response: Response,name: Optional[str]=None,credentials: dict = Depends(verify_token),db: Session = Depends(get_db)):
         """
             상품의 이름을 검색합니다.

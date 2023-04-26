@@ -68,7 +68,11 @@ class ProductService:
             fitered_update_product=update_product.dict(exclude_unset=True)
 
             name=fitered_update_product.get("name",False)
-            initial_name=korean_to_initial(name)
+
+            initial_name=False
+
+            if name!=False: 
+                initial_name=korean_to_initial(name)                
 
             updated_count=self.product_model.update_product_by_id(fitered_update_product,product_id,initial_name)
             if updated_count==0:

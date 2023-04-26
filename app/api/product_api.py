@@ -202,6 +202,10 @@ def product_router(app,services):
             product_existance=product_service.set_db(db).is_product_id_exists(product_id)
             if product_existance==False:
                 raise exception.ProductIdNotExists()
+            
+            is_product_authorized_by_user_id=product_service.set_db(db).is_product_authorized_by_user_id(current_user_id,product_id)
+            if is_product_authorized_by_user_id==False:
+                raise exception.ProductNotAuthorizedByUser()
 
             
             product_service.set_db(db).delete_product_by_id(product_id)
