@@ -18,11 +18,11 @@ def create_app():
         return {"data":"pong"}
 
     user_model=UserModel()
-    product_mode=ProductModel()
+    product_model=ProductModel()
     
     services=Services
     services.user_service=UserService(user_model,app.conf)
-    services.product_service=ProductService(product_mode,app.conf)
+    services.product_service=ProductService(product_model,app.conf)
 
     user_router(app,services)
     product_router(app,services)
