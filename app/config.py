@@ -37,10 +37,10 @@ env_mods={
     ),
     "test":
         Envs(
-            user="test",
+            user="root",
             password="test_mysql",
-            host="127.0.0.1",
-            port=3001,
+            host="mysql",
+            port=3306,
             database="paythere_test",
             jwt_secret_key="jwt_paythere",
             jwt_expire_time=60*60*24*7,
